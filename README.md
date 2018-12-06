@@ -1,6 +1,6 @@
 ## Welcome to myRetail!
 
-This node.js API provides product price information on a variety of retail products.
+This node.js API provides price information on a variety of retail products.
 
 ## Install and Run
 
