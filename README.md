@@ -23,7 +23,7 @@ This node.js API provides product price information on a variety of retail produ
     Pricing information will be loaded for the following product ids:
     [13860424, 13860425, 13860428, 13860429, 13860433]
     
-5. Run the Tests
+5. Run the tests
 
     ```$ npm test```
     
