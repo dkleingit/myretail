@@ -10,7 +10,7 @@ This node.js API retrieves product price information on a variety of retail prod
 
     https://docs.mongodb.com/manual/installation/
 
-3) Install Dependancies
+3) Install Dependencies
 
     $ npm install
     
@@ -32,8 +32,12 @@ This node.js API retrieves product price information on a variety of retail prod
 HTTP GET request at /products/{id}
     
     Delivers product data as JSON where {id} will be a number.
+    
+Example Request:
 
-Example response:
+    http://{host}/products/13860428
+
+Example Response:
 
     {"id":13860428,"name":"The Big Lebowski (Blu-ray) (Widescreen)","current_price":{"value": 13.49,"currency_code":"USD"}}
 
