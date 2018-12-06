@@ -4,7 +4,8 @@ var models = require('../models');
 var apis = require('../apis');
 var async = require('async');
 
-const INVALID_ID_MESSAGE = 'The product id is invalid.';
+const INVALID_ID_MESSAGE = 'Please provide a valid product id.';
+const INVALID_PRICE_MESSAGE = 'Please provide a valid price.';
 
 var product = {
 
@@ -15,8 +16,6 @@ var product = {
         if (validators.product.isValidId(productId) === false)
             return next(new errors.ValidationError(INVALID_ID_MESSAGE));
             
-        productId = validators.product.normalizeId(productId);
-        
         findByProductId(productId, function(err, result)
         {
             if (err)
@@ -28,16 +27,17 @@ var product = {
     upsert: function (req, res, next)
     {
         var productId = req.params.id;
-        var current_price = req.body.current_price;
+        var currentPrice = req.body.current_price;
         
         if (validators.product.isValidId(productId) === false)
             return next(new errors.ValidationError(INVALID_ID_MESSAGE));
             
-        productId = validators.product.normalizeId(productId);
-        
+        if (validators.product.isValidPrice(currentPrice) === false)
+            return next(new errors.ValidationError(INVALID_PRICE_MESSAGE));
+            
         var p = {};
         p.product_id = productId;
-        p.current_price = current_price;
+        p.current_price = currentPrice;
         
         //update the price
         models.product.upsert(p, function(err, result)

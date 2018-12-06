@@ -14,9 +14,18 @@ var product =
         return true;
     },
     
-    normalizeId: function normalizeId(id)
+    isValidPrice: function isValidPrice(price)
     {
-        return id.trim();
+        if (price == null)
+            return false;
+        
+        if (price === undefined)
+            return false;
+            
+        if (isNaN(price))
+            return false;
+            
+        return true;
     }
 };
 

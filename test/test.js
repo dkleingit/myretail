@@ -68,6 +68,22 @@ describe('All', function() {
           });
       });
       
+      describe('/PUT product price with invalid price', () => {
+      it('it should return an invalid price message', (done) => {
+        chai.request(server)
+            .put('/products/' + testPutProductId)
+            .send({current_price: 'abc'})
+            .end((err, res) => {
+                should.not.exist(err);
+                res.should.have.status(422);
+                res.body.should.be.a('object');
+                res.body.should.have.property('error');
+            
+              done();
+            });
+          });
+      });
+      
       //tear down
       after(function(done) {
         models.product.removeByProductId (testPutProductId, 

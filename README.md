@@ -1,4 +1,4 @@
-## Welcome to myretail!
+## Welcome to myRetail!
 
 This node.js API provides product price information on a variety of retail products.
 
