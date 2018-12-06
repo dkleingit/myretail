@@ -2,6 +2,7 @@ var chai = require('chai');
 var chaiHttp = require('chai-http');
 var should = chai.should();
 var server = require('../server');
+const testProductId = '13860428';
 
 chai.use(chaiHttp);
 
@@ -9,7 +10,7 @@ describe('All', function() {
     describe('/GET product price', () => {
       it('it should retrieve a correct product price', (done) => {
         chai.request(server)
-            .get('/products/13860428')
+            .get('/products/' + testProductId)
             .end((err, res) => {
                 should.not.exist(err);
                 res.should.have.status(200);

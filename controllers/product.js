@@ -34,19 +34,13 @@ var product = {
             //retrieve from local data store
             function (apiResult, callback)
             {
-                models.product.findById(id, function(err, dbResults)
+                models.product.findById(id, function(err, dbResult)
                 {
                     if (err)
                         return next(err);
                         
                     var p = {};
-                        
-                    if (dbResults && dbResults.length > 0)
-                    {
-                       p.current_price = {};
-                       p.current_price.value = (dbResults[0].price/100).toFixed(2);
-                       p.current_price.currency_code = 'USD';
-                    }
+                    p.id = id;
                     
                     if (apiResult 
                     && apiResult.product
@@ -55,8 +49,14 @@ var product = {
                     {
                         p.name = apiResult.product.item.product_description.title;
                     }
-                    
-                    p.id = id;
+                        
+                    if (dbResult)
+                    {
+                       var r = dbResult;
+                       p.current_price = {};
+                       p.current_price.value = formatPrice(r.price, r.currency_code);
+                       p.current_price.currency_code = r.currency_code;
+                    }
                     
                     res.send(p);
                 });
@@ -66,5 +66,13 @@ var product = {
 
     }
 };
+
+function formatPrice(price, currencyCode)
+{
+    if (price)
+        return (price/100).toFixed(2);
+    else
+        return null;
+}
 
 module.exports = product;
