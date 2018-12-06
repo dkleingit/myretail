@@ -8,17 +8,18 @@ const dbHost = process.env.DB_HOST || 'localhost';
 
 mongoose.connect('mongodb://' + dbHost +'/' + dbName, { useNewUrlParser: true });
 
-const Product = mongoose.model('Product', { product_id: Number, price: Number, currency_code: String });
+const Product = mongoose.model('Product', { product_id: Number, current_price: Number, currency_code: String });
 
 var product = {
     
     findByProductId: function (product_id, next) 
     {
-        Product.findOne({product_id:product_id},function(err, results) {
-            if (err)
-                return next(err);
-            
-            return next(null, results);
+        Product.findOne({product_id:product_id})
+        .then((results) => {
+            next(null, results);
+        })
+        .catch((err) => {
+            next (err);
         });
     },
     
@@ -31,7 +32,19 @@ var product = {
         .catch((err) => {
             next(err);
         });
-    }
+    },
+    
+    removeByProductId: function (product_id, next) 
+    {
+        Product.deleteOne({product_id:product_id})
+        .then((results) => {
+            next(null, results);
+        })
+        .catch((err) => {
+            next (err);
+        });
+    },
 };
+
 
 module.exports = product;

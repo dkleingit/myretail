@@ -17,38 +17,43 @@ var product = {
             
         productId = validators.product.normalizeId(productId);
         
-        async.waterfall([
+        findByProductId(productId, function(err, result)
+        {
+            if (err)
+                return next(err);
+                
+            res.send(result);
+        });
+    },
+    upsert: function (req, res, next)
+    {
+        var productId = req.params.id;
+        var current_price = req.body.current_price;
+        
+        if (validators.product.isValidId(productId) === false)
+            return next(new errors.ValidationError(INVALID_ID_MESSAGE));
             
-            //retrieve from target api
-            function(callback)
+        productId = validators.product.normalizeId(productId);
+        
+        var p = {};
+        p.product_id = productId;
+        p.current_price = current_price;
+        
+        //update the price
+        models.product.upsert(p, function(err, result)
+        {
+            if (err)
+                return next(err);
+            
+            //return the current product information
+            findByProductId(productId, function(err, result)
             {
-                apis.target.getProductById(productId, function(err, result)
-                {
-                    if (err)
-                        return next(err);
+                if (err)
+                    return next(err);
                     
-                    callback(null, result);
-                });
-            },
-            
-            //retrieve from local data store
-            function (apiResult, callback)
-            {
-                models.product.findByProductId(productId, function(err, dbResult)
-                {
-                    if (err)
-                        return next(err);
-                        
-                    callback(null, dbResult, apiResult);
-                });
-            },
-            
-            function (dbResult, apiResult, callback)
-            {
-                var product = toProductInfo(productId, dbResult, apiResult);
-                res.send(product);
-            }
-        ]);
+                res.json(result);
+            });
+        });
     }
 };
 
@@ -69,7 +74,7 @@ function toProductInfo (productId, dbResult, apiResult)
     {
        var r = dbResult;
        p.current_price = {};
-       p.current_price.value = formatPrice(r.price, r.currency_code);
+       p.current_price.value = formatPrice(r.current_price, r.currency_code);
        p.current_price.currency_code = r.currency_code;
     }
     
@@ -79,9 +84,46 @@ function toProductInfo (productId, dbResult, apiResult)
 function formatPrice(price, currencyCode)
 {
     if (price)
-        return (price/100).toFixed(2);
+        return Number((price/100).toFixed(2));
     else
         return null;
+}
+
+function findByProductId(productId, next)
+{
+    async.waterfall([
+            
+        //retrieve from target api
+        function(callback)
+        {
+            apis.target.getProductById(productId, function(err, result)
+            {
+                if (err)
+                    return next(err);
+                
+                callback(null, result);
+            });
+        },
+        
+        //retrieve from local data store
+        function (apiResult, callback)
+        {
+            models.product.findByProductId(productId, function(err, dbResult)
+            {
+                if (err)
+                    return next(err);
+                    
+                callback(null, dbResult, apiResult);
+            });
+        },
+        
+        //combine results
+        function (dbResult, apiResult, callback)
+        {
+            var product = toProductInfo(productId, dbResult, apiResult);
+            return next(null, product);
+        }
+    ]);
 }
 
 module.exports = product;
