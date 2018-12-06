@@ -40,7 +40,7 @@ HTTP GET request at /products/{id}
     
 Example Request:
 
-    http://{host}/products/13860428
+    http://localhost:8080/products/13860428
 
 Example Response:
 
