@@ -8,21 +8,21 @@ const INVALID_ID_MESSAGE = 'The product id is invalid.';
 
 var product = {
 
-    find: function (req, res, next)
+    findByProductId: function (req, res, next)
     {
-        var id = req.params.id;
+        var productId = req.params.id;
         
-        if (validators.product.isValidId(id) === false)
+        if (validators.product.isValidId(productId) === false)
             return next(new errors.ValidationError(INVALID_ID_MESSAGE));
             
-        id = validators.product.normalizeId(id);
+        productId = validators.product.normalizeId(productId);
         
         async.waterfall([
             
             //retrieve from target api
             function(callback)
             {
-                apis.target.getProductById(id, function(err, result)
+                apis.target.getProductById(productId, function(err, result)
                 {
                     if (err)
                         return next(err);
@@ -34,38 +34,47 @@ var product = {
             //retrieve from local data store
             function (apiResult, callback)
             {
-                models.product.findById(id, function(err, dbResult)
+                models.product.findByProductId(productId, function(err, dbResult)
                 {
                     if (err)
                         return next(err);
                         
-                    var p = {};
-                    p.id = id;
-                    
-                    if (apiResult 
-                    && apiResult.product
-                    && apiResult.product.item
-                    && apiResult.product.item.product_description)
-                    {
-                        p.name = apiResult.product.item.product_description.title;
-                    }
-                        
-                    if (dbResult)
-                    {
-                       var r = dbResult;
-                       p.current_price = {};
-                       p.current_price.value = formatPrice(r.price, r.currency_code);
-                       p.current_price.currency_code = r.currency_code;
-                    }
-                    
-                    res.send(p);
+                    callback(null, dbResult, apiResult);
                 });
+            },
+            
+            function (dbResult, apiResult, callback)
+            {
+                var product = toProductInfo(productId, dbResult, apiResult);
+                res.send(product);
             }
-        
         ]);
-
     }
 };
+
+function toProductInfo (productId, dbResult, apiResult)
+{
+    var p = {};
+    p.id = productId;
+    
+    if (apiResult 
+    && apiResult.product
+    && apiResult.product.item
+    && apiResult.product.item.product_description)
+    {
+        p.name = apiResult.product.item.product_description.title;
+    }
+        
+    if (dbResult)
+    {
+       var r = dbResult;
+       p.current_price = {};
+       p.current_price.value = formatPrice(r.price, r.currency_code);
+       p.current_price.currency_code = r.currency_code;
+    }
+    
+    return p;
+}
 
 function formatPrice(price, currencyCode)
 {

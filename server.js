@@ -5,7 +5,7 @@ var app = express();
 
 const port = process.env.PORT || 8080;
 
-app.get('/products/:id', controllers.product.find);
+app.get('/products/:id', controllers.product.findByProductId);
 app.use(controllers.error.handle);
  
 app.listen(port);

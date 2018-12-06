@@ -18,6 +18,8 @@ This node.js API retrieves product price information on a variety of retail prod
 
     $ node loader.js
     
+    Pricing information will be loaded for the following product ids: [13860424, 13860425, 13860428, 13860429, 13860433]
+    
 5) Run Tests
 
     $ npm test
