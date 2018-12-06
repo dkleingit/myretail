@@ -4,32 +4,32 @@ This node.js API retrieves product price information on a variety of retail prod
 
 ## Install and Run
 
-1) Clone this repository from github
+1. Clone this repository from github
 
     git clone https://github.com/dkleingit/myretail.git
 
-2) Install mongodb (this will store the pricing information)
+2. Install mongodb (this will store the pricing information)
 
     https://docs.mongodb.com/manual/installation/
 
-3) Install Dependencies
+3. Install Dependencies
 
     $ npm install
     
-4) Load the data
+4. Load the data
 
     $ node loader.js
     
-    Pricing information will be loaded for the following product ids: 
+    Pricing information will be loaded for the following product ids:
     [13860424, 13860425, 13860428, 13860429, 13860433]
     
-5) Run Tests
+5. Run Tests
 
     $ npm test
     
-6) Start the server
+6. Start the server
 
-    $ node server.js
+    $ node server.js`
     
 
 ## API
