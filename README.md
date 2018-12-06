@@ -21,7 +21,7 @@ This node.js API provides price information on a variety of retail products.
     ```$ node loader.js```
     
     Pricing information will be loaded for the following product ids:
-    [13860424, 13860425, 13860428, 13860429, 13860433]
+    ```[13860424, 13860425, 13860428, 13860429, 13860433]```
     
 5. Run the tests
 
