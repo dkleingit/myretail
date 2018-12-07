@@ -1,12 +1,9 @@
+const config = require('../config');
 const mongoose = require('mongoose');
 //disable useFindAndModify since it is deprecated
 mongoose.set('useFindAndModify', false);
 
-//db connection information
-const dbName = process.env.DB_NAME || 'myretail';
-const dbHost = process.env.DB_HOST || 'localhost';
-
-mongoose.connect('mongodb://' + dbHost +'/' + dbName, { useNewUrlParser: true });
+mongoose.connect(config.dbConnectionString, { useNewUrlParser: true });
 
 const Product = mongoose.model('Product', { product_id: Number, current_price: Number, currency_code: String });
 
