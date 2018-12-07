@@ -1,10 +1,11 @@
 {
-  "name": "target",
-  "version": "0.0.0",
-  "description": "",
+  "name": "myRetail",
+  "version": "1.0.0",
+  "description": "This node.js API provides price information on a variety of retail products.",
   "main": "server.js",
-  "repository": "",
-  "author": "",
+  "repository": "github:dkleingit/myretail",
+  "license": "(MIT OR Apache-2.0)",
+  "author": "Dan Kleinschmidt",
   "dependencies": {
     "async": "^2.6.1",
     "body-parser": "^1.18.3",
