@@ -1,6 +1,9 @@
-function log(message)
+var logger =
 {
-    console.log(message);
-}
+    log: function(message)
+    {
+        console.log(message);
+    }
+};
 
-module.exports={log};
+module.exports = logger;
