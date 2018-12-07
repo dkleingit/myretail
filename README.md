@@ -36,7 +36,11 @@ This node.js API provides price information on a variety of retail products.
 
 HTTP GET request at /products/{id}
     
-    Delivers product data as JSON where {id} will be a number.
+    Delivers product data as JSON where {id} is a number.
+
+HTTP PUT request at /products/{id}
+    
+    Updates the product's price in the data store and returns the updated record.
     
 Example Request:
 
