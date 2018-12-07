@@ -14,6 +14,6 @@ app.use(controllers.error.handle);
  
 app.listen(port);
 
-console.log ('Listening on port: '+ port);
+console.log ('Listening on port: ' + port);
 
 module.exports = app; // for testing
